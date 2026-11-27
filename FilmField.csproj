@@ -1,0 +1,53 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows10.0.26100.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+    <SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
+    <RootNamespace>FilmField</RootNamespace>
+    <AssemblyName>FilmField</AssemblyName>
+    <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
+    <Version>0.10</Version>
+    <OutputPath>$(MSBuildThisFileDirectory)publish\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <ApplicationManifest>App\Properties\app.manifest</ApplicationManifest>
+    <UseWinUI>true</UseWinUI>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <WindowsPackageType>None</WindowsPackageType>
+    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    <EnableMsixTooling>true</EnableMsixTooling>
+    <WindowsSdkPackageVersion>10.0.26100.54</WindowsSdkPackageVersion>
+    <SatelliteResourceLanguages>zh-Hans;en</SatelliteResourceLanguages>
+    <DebugType>embedded</DebugType>
+    <AllowedReferenceRelatedFileExtensions>.allowedextension</AllowedReferenceRelatedFileExtensions>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FFmpegInteropX" Version="2.1.0.81200" />
+    <PackageReference Include="Microsoft.Graphics.Win2D" Version="1.3.2" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260921001" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ApplicationDefinition Include="App\App.xaml" />
+    <Page Remove="App\App.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\Fonts\*.ttf" />
+    <Content Include="Resources\Fonts\*.ttf" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="docs\THIRD-PARTY-NOTICES.md" Link="THIRD-PARTY-NOTICES.md" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <Target Name="TrimLanguageFolders" AfterTargets="Build">
+    <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -Command &quot;Get-ChildItem -LiteralPath '$(OutputPath)' -Directory | Where-Object { $_.Name -match '^[a-z]{2,7}(-[a-z0-9]+)+$' -and $_.Name -notin 'zh-CN','en-us' } | Remove-Item -Recurse -Force&quot;" />
+  </Target>
+
+</Project>

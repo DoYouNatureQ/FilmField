@@ -1,0 +1,164 @@
+<Page
+    x:Class="FilmField.Views.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <ScrollViewer>
+    <StackPanel MaxWidth="720" HorizontalAlignment="Left" Margin="24,16,24,24" Spacing="6">
+
+      <TextBlock Text="{x:Bind L('设置')}" FontSize="20" FontFamily="{StaticResource AppUiFontBold}" FontWeight="Bold" Margin="0,0,0,12" />
+
+      <TextBlock Text="{x:Bind L('通用')}" FontSize="14" FontFamily="{StaticResource AppUiFontBold}" FontWeight="Bold" Opacity="0.7" Margin="0,0,0,4" />
+      <ToggleSwitch
+          x:Name="StartupToggle"
+          Header="{x:Bind L('开机自动启动')}"
+          OnContent=""
+          OffContent=""
+          Margin="0,0,0,4"
+          Toggled="StartupToggle_Toggled" />
+      <ComboBox
+          x:Name="LanguageCombo"
+          Header="{x:Bind L('语言')}"
+          Margin="0,0,0,4"
+          SelectionChanged="LanguageCombo_SelectionChanged">
+        <ComboBoxItem Content="{x:Bind L('跟随系统')}" />
+        <ComboBoxItem Content="简体中文" />
+        <ComboBoxItem Content="English" />
+        <ComboBoxItem Content="繁體中文" />
+        <ComboBoxItem Content="日本語" />
+        <ComboBoxItem Content="한국어" />
+        <ComboBoxItem Content="Русский" />
+        <ComboBoxItem Content="Español" />
+        <ComboBoxItem Content="Italiano" />
+        <ComboBoxItem Content="Português" />
+        <ComboBoxItem Content="Latina" />
+        <ComboBoxItem Content="Deutsch" />
+        <ComboBoxItem Content="Français" />
+        <ComboBoxItem Content="Türkçe" />
+      </ComboBox>
+
+      <TextBlock Text="{x:Bind L('外观')}" FontSize="14" FontFamily="{StaticResource AppUiFontBold}" FontWeight="Bold" Opacity="0.7" Margin="0,8,0,4" />
+      <ComboBox
+          x:Name="ThemeCombo"
+          Header="{x:Bind L('主题')}"
+          Margin="0,0,0,4"
+          SelectionChanged="ThemeCombo_SelectionChanged">
+        <ComboBoxItem Content="{x:Bind L('跟随系统')}" />
+        <ComboBoxItem Content="{x:Bind L('浅色')}" />
+        <ComboBoxItem Content="{x:Bind L('深色')}" />
+      </ComboBox>
+
+      <TextBlock Text="{x:Bind L('section.播放')}" FontSize="14" FontFamily="{StaticResource AppUiFontBold}" FontWeight="Bold" Opacity="0.7" Margin="0,12,0,4" />
+      <ToggleSwitch
+          x:Name="ResumeToggle"
+          Header="{x:Bind L('记住播放位置')}"
+          OnContent=""
+          OffContent=""
+          Margin="0,0,0,4"
+          Toggled="ResumeToggle_Toggled" />
+      <ToggleSwitch
+          x:Name="ClickVideoToggle"
+          Header="{x:Bind L('点击画面播放/暂停')}"
+          OnContent=""
+          OffContent=""
+          Margin="0,0,0,4"
+          Toggled="ClickVideoToggle_Toggled" />
+      <ToggleSwitch
+          x:Name="PausePanelToggle"
+          Header="{x:Bind L('切换面板时暂停播放')}"
+          OnContent=""
+          OffContent=""
+          Margin="0,0,0,4"
+          Toggled="PausePanelToggle_Toggled" />
+      <ToggleSwitch
+          x:Name="ArrowScanToggle"
+          Header="{x:Bind L('←/→ 按住倍速')}"
+          OnContent=""
+          OffContent=""
+          Margin="0,0,0,4"
+          Toggled="ArrowScanToggle_Toggled" />
+
+      <StackPanel x:Name="ScanOptions" Spacing="6" Margin="28,0,0,6">
+        <StackPanel Orientation="Horizontal" Spacing="10">
+          <TextBlock Text="{x:Bind L('轻按跳转')}" FontSize="13" Width="72" VerticalAlignment="Center" />
+          <ComboBox x:Name="SkipCombo" MinWidth="110" SelectionChanged="SkipCombo_SelectionChanged">
+            <ComboBoxItem Content="{x:Bind L('3 秒')}" Tag="3" />
+            <ComboBoxItem Content="{x:Bind L('5 秒')}" Tag="5" />
+            <ComboBoxItem Content="{x:Bind L('10 秒')}" Tag="10" />
+            <ComboBoxItem Content="{x:Bind L('15 秒')}" Tag="15" />
+            <ComboBoxItem Content="{x:Bind L('30 秒')}" Tag="30" />
+          </ComboBox>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Spacing="10">
+          <TextBlock Text="{x:Bind L('按住慢放')}" FontSize="13" Width="72" VerticalAlignment="Center" />
+          <ComboBox x:Name="SlowCombo" MinWidth="110" SelectionChanged="SlowCombo_SelectionChanged">
+            <ComboBoxItem Content="0.25×" Tag="0.25" />
+            <ComboBoxItem Content="0.5×" Tag="0.5" />
+            <ComboBoxItem Content="0.75×" Tag="0.75" />
+          </ComboBox>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Spacing="10">
+          <TextBlock Text="{x:Bind L('按住快放')}" FontSize="13" Width="72" VerticalAlignment="Center" />
+          <ComboBox x:Name="FastCombo" MinWidth="110" SelectionChanged="FastCombo_SelectionChanged">
+            <ComboBoxItem Content="1.25×" Tag="1.25" />
+            <ComboBoxItem Content="1.5×" Tag="1.5" />
+            <ComboBoxItem Content="2.0×" Tag="2.0" />
+            <ComboBoxItem Content="2.5×" Tag="2.5" />
+            <ComboBoxItem Content="3.0×" Tag="3.0" />
+          </ComboBox>
+        </StackPanel>
+      </StackPanel>
+
+      <TextBlock Text="{x:Bind L('解码')}" FontSize="14" FontFamily="{StaticResource AppUiFontBold}" FontWeight="Bold" Opacity="0.7" Margin="0,12,0,4" />
+      <ComboBox
+          x:Name="DecoderCombo"
+          Margin="0,0,0,4"
+          SelectionChanged="DecoderCombo_SelectionChanged">
+        <ComboBoxItem Content="{x:Bind L('FFmpeg 优先（支持 HEVC / DTS 等更多格式）')}" />
+        <ComboBoxItem Content="{x:Bind L('仅系统解码（兼容性保守）')}" />
+      </ComboBox>
+
+      <TextBlock Text="{x:Bind L('截图')}" FontSize="14" FontFamily="{StaticResource AppUiFontBold}" FontWeight="Bold" Opacity="0.7" Margin="0,12,0,4" />
+      <ToggleSwitch
+          x:Name="ScreenshotSubtitleToggle"
+          Header="{x:Bind L('截图包含字幕')}"
+          OnContent=""
+          OffContent=""
+          Margin="0,0,0,4"
+          Toggled="ScreenshotSubtitleToggle_Toggled" />
+      <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,0,0,4">
+        <TextBox x:Name="ScreenshotDirBox" Width="400" IsReadOnly="True" />
+        <Button Content="{x:Bind L('更改...')}" Click="ScreenshotDirBrowse_Click" />
+        <Button Content="{x:Bind L('恢复默认')}" Click="ScreenshotDirReset_Click" />
+      </StackPanel>
+
+      <TextBlock Text="{x:Bind L('媒体库')}" FontSize="14" FontFamily="{StaticResource AppUiFontBold}" FontWeight="Bold" Opacity="0.7" Margin="0,12,0,4" />
+      <ToggleSwitch
+          x:Name="AutoPosterToggle"
+          Header="{x:Bind L('自动联网查找海报')}"
+          OnContent=""
+          OffContent=""
+          Margin="0,0,0,4"
+          Toggled="AutoPosterToggle_Toggled" />
+
+      <TextBlock Text="{x:Bind L('缓存')}" FontSize="14" FontFamily="{StaticResource AppUiFontBold}" FontWeight="Bold" Opacity="0.7" Margin="0,12,0,4" />
+      <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,0,0,4">
+        <Button Content="{x:Bind L('清理缩略图与预览缓存')}" Click="ClearCache_Click" />
+        <TextBlock x:Name="CacheSizeText" VerticalAlignment="Center" FontSize="12" Opacity="0.6" />
+      </StackPanel>
+      <TextBlock Text="{x:Bind L('清理后各库封面与进度条预览会在需要时重新生成')}" FontSize="12" Opacity="0.5" />
+
+      <TextBlock Text="{x:Bind L('关于')}" FontSize="14" FontFamily="{StaticResource AppUiFontBold}" FontWeight="Bold" Opacity="0.7" Margin="0,12,0,4" />
+      <TextBlock x:Name="AppVersionText" Text="FilmField" FontSize="13" />
+      <TextBlock Text="{x:Bind L('© 2026 NatureQ（DoYouNatureQ），保留所有权利')}" FontSize="12" Opacity="0.55" />
+      <TextBlock Text="{x:Bind L('FilmField 是纯本地播放器，不内置、不提供、不指向任何影片资源；播放内容均来自用户自己的本地文件，其著作权归原权利人所有')}" FontSize="12" Opacity="0.55" TextWrapping="Wrap" />
+      <StackPanel Spacing="2" Margin="0,8,0,0">
+        <TextBlock Text="{x:Bind L('界面字体：HarmonyOS Sans SC © Huawei Device Co., Ltd.，依鸿蒙字体许可协议免费商用，原样打包未做修改')}" FontSize="12" Opacity="0.5" TextWrapping="Wrap" />
+        <TextBlock Text="{x:Bind L('解码内核：FFmpeg（LGPL-2.1）· FFmpegInteropX（Apache 2.0）· Windows App SDK（MIT）')}" FontSize="12" Opacity="0.5" TextWrapping="Wrap" />
+        <TextBlock Text="{x:Bind L('海报数据：IMDb / TVmaze / Bangumi，仅按用户请求临时获取缓存用于本地展示，版权归对应平台与权利人所有')}" FontSize="12" Opacity="0.5" TextWrapping="Wrap" />
+        <TextBlock Text="{x:Bind L('界面符号图标使用系统自带 Segoe Fluent Icons 字体，版权 Microsoft Corporation')}" FontSize="12" Opacity="0.5" TextWrapping="Wrap" />
+      </StackPanel>
+      <Button Content="{x:Bind L('查看完整版权声明')}" Margin="0,10,0,0" Click="OpenNotices_Click" />
+    </StackPanel>
+  </ScrollViewer>
+</Page>

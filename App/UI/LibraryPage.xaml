@@ -1,0 +1,365 @@
+<Page
+    x:Class="FilmField.Views.LibraryPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:services="using:FilmField.Services">
+
+  <Page.Resources>
+    <DataTemplate x:Key="LibraryCardTemplate" x:DataType="services:LibraryEntry">
+      <Grid Width="232" Height="140" Margin="8,8,8,8">
+        <Border
+            Width="212"
+            Height="120"
+            Margin="20,20,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            CornerRadius="10"
+            Opacity="0.45"
+            Background="{ThemeResource LibraryCardFillBrush}"
+            BorderBrush="{ThemeResource LibraryCardStrokeBrush}"
+            BorderThickness="1" />
+        <Border
+            Width="212"
+            Height="120"
+            Margin="10,10,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            CornerRadius="10"
+            Opacity="0.7"
+            Background="{ThemeResource LibraryCardFillBrush}"
+            BorderBrush="{ThemeResource LibraryCardStrokeBrush}"
+            BorderThickness="1" />
+        <Border
+            Width="212"
+            Height="120"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            CornerRadius="10"
+            Background="{ThemeResource LibraryCardFillBrush}"
+            BorderBrush="{ThemeResource LibraryCardStrokeBrush}"
+            BorderThickness="1">
+          <StackPanel
+              Margin="18,0,18,0"
+              Spacing="9"
+              HorizontalAlignment="Center"
+              VerticalAlignment="Center">
+            <StackPanel
+                Orientation="Horizontal"
+                Spacing="7"
+                HorizontalAlignment="Center">
+              <FontIcon
+                  Glyph="&#xE8B7;"
+                  FontSize="16"
+                  Opacity="0.45"
+                  VerticalAlignment="Center" />
+              <TextBlock
+                  Text="{x:Bind Name}"
+                  FontSize="15"
+                  FontFamily="{StaticResource AppUiFontBold}" FontWeight="Bold"
+                  MaxWidth="132"
+                  MaxLines="1"
+                  VerticalAlignment="Center"
+                  TextTrimming="CharacterEllipsis" />
+            </StackPanel>
+            <StackPanel
+                Orientation="Horizontal"
+                Spacing="10"
+                HorizontalAlignment="Center">
+              <TextBlock Text="{x:Bind SummaryText}" FontSize="12" Opacity="0.45" />
+            </StackPanel>
+          </StackPanel>
+        </Border>
+      </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="PosterTemplate" x:DataType="services:LibraryEntry">
+      <Grid Width="164" Margin="8,8,8,14">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="246" />
+          <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Border
+            Grid.Row="0"
+            CornerRadius="10"
+            Background="{ThemeResource CardPlaceholderBrush}"
+            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+            BorderThickness="1">
+          <Grid>
+            <FontIcon
+                Glyph="&#xE8B9;"
+                FontSize="30"
+                Opacity="0.22"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Visibility="{x:Bind VideoGlyphVisibility}" />
+            <FontIcon
+                Glyph="&#xE8B7;"
+                FontSize="30"
+                Opacity="0.26"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Visibility="{x:Bind FolderGlyphVisibility}" />
+            <Image Source="{x:Bind Thumbnail, Mode=OneWay}" Stretch="UniformToFill" />
+            <Border
+                HorizontalAlignment="Left"
+                VerticalAlignment="Bottom"
+                Margin="8"
+                Padding="6,2,8,2"
+                CornerRadius="9"
+                Background="#B3000000"
+                Visibility="{x:Bind PillVisibility}">
+              <StackPanel Orientation="Horizontal" Spacing="5">
+                <FontIcon Glyph="&#xE8B7;" FontSize="10" Foreground="White" />
+                <TextBlock Text="{x:Bind ItemCountText}" FontSize="11" Foreground="White" />
+              </StackPanel>
+            </Border>
+            <ProgressBar
+                Value="{x:Bind ProgressRatio, Mode=OneWay}"
+                Maximum="1"
+                Height="3"
+                Padding="0"
+                CornerRadius="0"
+                Background="Transparent"
+                Foreground="{ThemeResource AccentFillColorDefaultBrush}"
+                VerticalAlignment="Bottom"
+                Visibility="{x:Bind ProgressVisibility, Mode=OneWay}" />
+            <Border
+                CornerRadius="10"
+                BorderThickness="2"
+                BorderBrush="{ThemeResource AccentFillColorDefaultBrush}"
+                Visibility="{x:Bind DropRingVisibility, Mode=OneWay}" />
+          </Grid>
+        </Border>
+
+        <TextBlock
+            Grid.Row="1"
+            Text="{x:Bind Name}"
+            Width="160"
+            FontSize="13"
+            FontFamily="{StaticResource AppUiFontBold}" FontWeight="Bold"
+            Margin="2,9,2,0"
+            MaxLines="2"
+            TextWrapping="Wrap"
+            TextAlignment="Center"
+            TextTrimming="CharacterEllipsis" />
+      </Grid>
+    </DataTemplate>
+
+    <services:LibraryEntryTemplateSelector
+        x:Key="EntryTemplateSelector"
+        LibraryTemplate="{StaticResource LibraryCardTemplate}"
+        PosterTemplate="{StaticResource PosterTemplate}" />
+  </Page.Resources>
+
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+
+    <Grid Grid.Row="0" Margin="24,16,24,12">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="Auto" />
+      </Grid.ColumnDefinitions>
+      <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+        <Button
+            x:Name="BackButton"
+            Padding="7,5,7,5"
+            Visibility="Collapsed"
+            Click="Back_Click"
+            ToolTipService.ToolTip="{x:Bind L('返回上一级')}">
+          <FontIcon Glyph="&#xE72B;" FontSize="13" />
+        </Button>
+        <TextBlock
+            x:Name="TitleText"
+            Text="{x:Bind L('主页')}"
+            FontSize="20"
+            FontFamily="{StaticResource AppUiFontBold}" FontWeight="Bold"
+            TextTrimming="CharacterEllipsis"
+            MaxWidth="320" />
+        <TextBlock
+            x:Name="PathText"
+            FontSize="12"
+            Opacity="0.5"
+            VerticalAlignment="Center"
+            Margin="2,4,0,0"
+            TextTrimming="CharacterEllipsis"
+            MaxWidth="260"
+            Visibility="Collapsed" />
+        <TextBlock x:Name="CountText" FontSize="13" Opacity="0.55" VerticalAlignment="Center" />
+        <TextBlock x:Name="ScanningText" Text="{x:Bind L('正在扫描…')}" FontSize="13" Opacity="0.55" VerticalAlignment="Center" Visibility="Collapsed" />
+      </StackPanel>
+      <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+        <ComboBox x:Name="SortCombo" MinWidth="120" SelectionChanged="SortCombo_SelectionChanged">
+          <ComboBoxItem Content="{x:Bind L('最近播放')}" />
+          <ComboBoxItem Content="{x:Bind L('名称')}" />
+          <ComboBoxItem Content="{x:Bind L('大小')}" />
+        </ComboBox>
+        <Button Content="{x:Bind L('刷新')}" Click="Refresh_Click" />
+        <Button Content="{x:Bind L('管理')}" Click="ManageSources_Click" />
+        <DropDownButton Content="{x:Bind L('添加')}" Style="{StaticResource AccentButtonStyle}">
+          <DropDownButton.Flyout>
+            <MenuFlyout Placement="BottomEdgeAlignedRight">
+              <MenuFlyoutItem Text="{x:Bind L('文件夹')}" Click="AddFolder_Click">
+                <MenuFlyoutItem.Icon>
+                  <FontIcon Glyph="&#xE8B7;" />
+                </MenuFlyoutItem.Icon>
+              </MenuFlyoutItem>
+              <MenuFlyoutItem Text="{x:Bind L('视频文件')}" Click="AddFiles_Click">
+                <MenuFlyoutItem.Icon>
+                  <FontIcon Glyph="&#xE714;" />
+                </MenuFlyoutItem.Icon>
+              </MenuFlyoutItem>
+            </MenuFlyout>
+          </DropDownButton.Flyout>
+        </DropDownButton>
+      </StackPanel>
+    </Grid>
+
+    <ScrollViewer
+        x:Name="PageScroll"
+        Grid.Row="1"
+        Padding="0,0,0,20"
+        HorizontalScrollMode="Disabled"
+        HorizontalScrollBarVisibility="Disabled"
+        VerticalScrollBarVisibility="Auto">
+      <StackPanel>
+
+        <StackPanel x:Name="LibraryShelfSection" Visibility="Collapsed">
+          <Button
+              Margin="16,6,16,0"
+              Tag="libraries"
+              Click="Section_Click"
+              Style="{StaticResource SectionHeaderStyle}">
+            <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+              <FontIcon x:Name="LibraryChevron" Glyph="&#xE70D;" FontSize="9" Opacity="0.5" VerticalAlignment="Center" />
+              <TextBlock Text="{x:Bind L('section.库')}" FontSize="14" FontFamily="{StaticResource AppUiFontBold}" FontWeight="Bold" />
+              <TextBlock x:Name="LibraryCountText" FontSize="12" Opacity="0.5" Margin="0,2,0,0" VerticalAlignment="Center" />
+            </StackPanel>
+          </Button>
+          <GridView
+              x:Name="LibraryShelf"
+              Margin="16,2,16,0"
+              IsItemClickEnabled="True"
+              ItemClick="LibraryShelf_ItemClick"
+              ContextRequested="LibraryGrid_ContextRequested"
+              SelectionMode="None"
+              ItemContainerStyle="{StaticResource PosterItemStyle}"
+              ItemTemplateSelector="{StaticResource EntryTemplateSelector}"
+              ScrollViewer.VerticalScrollMode="Disabled"
+              ScrollViewer.VerticalScrollBarVisibility="Disabled">
+            <GridView.ItemsPanel>
+              <ItemsPanelTemplate>
+                <ItemsWrapGrid Orientation="Horizontal" />
+              </ItemsPanelTemplate>
+            </GridView.ItemsPanel>
+          </GridView>
+        </StackPanel>
+
+        <Button
+            x:Name="VideoHeader"
+            Margin="16,2,16,0"
+            Tag="videos"
+            Click="Section_Click"
+            Style="{StaticResource SectionHeaderStyle}"
+            Visibility="Collapsed">
+          <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+            <FontIcon x:Name="VideoChevron" Glyph="&#xE70D;" FontSize="9" Opacity="0.5" VerticalAlignment="Center" />
+            <TextBlock Text="{x:Bind L('section.视频')}" FontSize="14" FontFamily="{StaticResource AppUiFontBold}" FontWeight="Bold" />
+            <TextBlock x:Name="VideoCountText" FontSize="12" Opacity="0.5" Margin="0,2,0,0" VerticalAlignment="Center" />
+          </StackPanel>
+        </Button>
+
+        <GridView
+            x:Name="LibraryGrid"
+            Margin="16,2,16,20"
+            IsItemClickEnabled="True"
+            ItemClick="LibraryGrid_ItemClick"
+            ContextRequested="LibraryGrid_ContextRequested"
+            CanDragItems="True"
+            DragItemsStarting="LibraryGrid_DragItemsStarting"
+            DragItemsCompleted="LibraryGrid_DragItemsCompleted"
+            AllowDrop="True"
+            DragOver="LibraryGrid_DragOver"
+            Drop="LibraryGrid_Drop"
+            SelectionMode="None"
+            ItemContainerStyle="{StaticResource PosterItemStyle}"
+            ItemTemplateSelector="{StaticResource EntryTemplateSelector}"
+            ScrollViewer.VerticalScrollMode="Disabled"
+            ScrollViewer.VerticalScrollBarVisibility="Disabled">
+          <GridView.ItemsPanel>
+            <ItemsPanelTemplate>
+              <ItemsWrapGrid Orientation="Horizontal" />
+            </ItemsPanelTemplate>
+          </GridView.ItemsPanel>
+        </GridView>
+
+        <StackPanel
+            x:Name="PagerPanel"
+            Orientation="Horizontal"
+            Spacing="10"
+            HorizontalAlignment="Center"
+            Margin="0,2,0,20"
+            Visibility="Collapsed">
+          <Button x:Name="PrevPageButton" Padding="9,5,9,5" Click="PrevPage_Click" IsEnabled="False" ToolTipService.ToolTip="{x:Bind L('上一页')}">
+            <FontIcon Glyph="&#xE76B;" FontSize="11" />
+          </Button>
+          <TextBlock x:Name="PagerText" FontSize="13" Opacity="0.6" VerticalAlignment="Center" />
+          <Button x:Name="NextPageButton" Padding="9,5,9,5" Click="NextPage_Click" IsEnabled="False" ToolTipService.ToolTip="{x:Bind L('下一页')}">
+            <FontIcon Glyph="&#xE76C;" FontSize="11" />
+          </Button>
+        </StackPanel>
+
+      </StackPanel>
+    </ScrollViewer>
+
+    <StackPanel
+        x:Name="EmptyState"
+        Grid.Row="1"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center"
+        Spacing="6">
+      <FontIcon Glyph="&#xE8B7;" FontSize="44" Opacity="0.35" HorizontalAlignment="Center" />
+      <TextBlock x:Name="EmptyTitle" Text="{x:Bind L('这里还没有视频')}" FontSize="18" FontFamily="{StaticResource AppUiFontBold}" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,10,0,0" />
+      <TextBlock x:Name="EmptyDesc" Text="{x:Bind L('添加文件夹或视频文件，自动生成海报墙与观看记录')}" FontSize="13" Opacity="0.55" HorizontalAlignment="Center" />
+      <StackPanel x:Name="EmptyActions" Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center" Margin="0,14,0,0">
+        <Button Content="{x:Bind L('添加文件夹')}" Click="AddFolder_Click" Style="{StaticResource AccentButtonStyle}" />
+        <Button Content="{x:Bind L('添加文件')}" Click="AddFiles_Click" />
+      </StackPanel>
+    </StackPanel>
+
+    <Border
+        x:Name="NoticeToast"
+        Grid.Row="1"
+        Margin="24,0,24,26"
+        Padding="13,7,15,8"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Bottom"
+        CornerRadius="12"
+        Background="#E6101010"
+        BorderBrush="#1FFFFFFF"
+        BorderThickness="1"
+        IsHitTestVisible="False"
+        Opacity="0"
+        Visibility="Collapsed">
+      <Border.RenderTransform>
+        <TranslateTransform x:Name="NoticeSlide" />
+      </Border.RenderTransform>
+      <StackPanel Orientation="Horizontal" Spacing="8">
+        <FontIcon
+            Glyph="&#xE73E;"
+            FontSize="10"
+            Foreground="White"
+            Opacity="0.6"
+            VerticalAlignment="Center" />
+        <TextBlock
+            x:Name="NoticeText"
+            FontSize="13"
+            Foreground="White"
+            VerticalAlignment="Center" />
+      </StackPanel>
+    </Border>
+  </Grid>
+</Page>

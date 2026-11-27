@@ -1,0 +1,15 @@
+bin/
+obj/
+publish/
+.workbuddy/
+Build/
+
+.vs/
+*.user
+*.suo
+
+
+
+*.cer
+*.pfx
+*.log
